@@ -13,11 +13,13 @@ const create = (newObject) => {
 };
 
 const remove = (id) => {
-  return axios.delete(`${baseUrl}/${id}`);
+  return axios.delete(`${baseUrl}/${id}`).then((response) => response.status);
 };
 
 const update = (updatedObject) => {
-  const request = axios.put(`${baseUrl}/${updatedObject.id}`, updatedObject);
+  const request = axios.put(`${baseUrl}/${updatedObject.id}`, {
+    newNumber: updatedObject.number,
+  });
   return request.then((response) => response.data);
 };
 

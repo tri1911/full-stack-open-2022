@@ -30,26 +30,22 @@ const App = () => {
       (person) => person.name === newPerson.name
     );
     if (existPerson) {
-      // window.alert(`${newPerson.name} is already added to the phone book`);
-      if (
-        window.confirm(
-          `${newPerson.name} is already added to the phone book, replace the old number with a new one?`
-        )
-      ) {
+      const shouldReplace = window.confirm(
+        `${newPerson.name} is already added to the phone book, replace the old number with a new one?`
+      );
+      shouldReplace &&
         personService
-          .update({
-            ...existPerson,
-            number: newPerson.number,
-          })
-          .then((returnedPerson) => {
-            updateNotification("success", `Updated ${returnedPerson.name}`);
+          .update({ ...existPerson, number: newPerson.number })
+          .then((updatedPerson) => {
+            updateNotification("success", `Updated ${updatedPerson.name}`);
             setPersons(
               persons.map((person) =>
-                person.id !== returnedPerson.id ? person : returnedPerson
+                person.id !== updatedPerson.id ? person : updatedPerson
               )
             );
           })
           .catch((error) => {
+            console.log(error);
             updateNotification(
               "failure",
               `Information of ${existPerson.name} has already been removed from server`
@@ -58,23 +54,30 @@ const App = () => {
               persons.filter((person) => person.id !== existPerson.id)
             );
           });
-      }
     } else {
-      personService.create(newPerson).then((returnedPerson) => {
-        updateNotification("success", `Added ${returnedPerson.name}`);
-        setPersons(persons.concat(returnedPerson));
-      });
+      personService
+        .create(newPerson)
+        .then((returnedPerson) => {
+          updateNotification("success", `Added ${returnedPerson.name}`);
+          setPersons(persons.concat(returnedPerson));
+        })
+        .catch((error) => {
+          updateNotification("failure", error.response.data.error);
+        });
     }
   };
 
-  const deletePerson = (id) => {
-    const personToRemove = persons.find((person) => person.id === id);
-    if (window.confirm(`Delete ${personToRemove.name}`)) {
-      personService.remove(id).then((_) => {
-        updateNotification("success", `Deleted ${personToRemove.name}`);
-        setPersons(persons.filter((person) => person.id !== id));
-      });
-    }
+  const deletePerson = (personToRemove) => {
+    personService.remove(personToRemove.id).then((responseStatus) => {
+      const isValidRemoval = responseStatus === 204;
+      updateNotification(
+        isValidRemoval ? "success" : "failure",
+        isValidRemoval
+          ? `Deleted ${personToRemove.name}`
+          : `Information of ${personToRemove.name} has already been removed from server`
+      );
+      setPersons(persons.filter((person) => person.id !== personToRemove.id));
+    });
   };
 
   const filteredPersons = persons.filter((person) =>

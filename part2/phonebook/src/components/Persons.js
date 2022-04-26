@@ -1,16 +1,22 @@
 import React from "react";
 
 const Person = ({ person, deletePerson }) => {
-  const { name, number } = person;
   return (
     <div>
-      {name} {number}{" "}
-      <button onClick={() => deletePerson(person.id)}>delete</button>
+      {person.name} {person.number}{" "}
+      <button
+        onClick={() => {
+          window.confirm(`Delete ${person.name}`) && deletePerson(person);
+        }}
+      >
+        delete
+      </button>
     </div>
   );
 };
 
 const Persons = ({ persons, deletePerson }) => {
+  console.log(persons);
   return (
     <div>
       {persons.map((person) => (
