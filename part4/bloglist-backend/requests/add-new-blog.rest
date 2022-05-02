@@ -1,0 +1,23 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlbGxhcyIsImlkIjoiNjI2ZWM3NWFlYmExMTAzODM5ZWQ5MmIyIiwiaWF0IjoxNjUxNDI3MTkyfQ.G9XPV344q-UMTSaLkLNEFXu1XlczJga7sykZphfTQ5o
+
+{
+  "title": "Lessons Learned from difficult situtations",
+  "author": "Elliot",
+  "url": "some url",
+  "likes": 100
+}
+
+###
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVrYWkiLCJpZCI6IjYyNmVjNzVkZWJhMTEwMzgzOWVkOTJiNSIsImlhdCI6MTY1MTQyNzQxOH0.sLDDg-nOf9W5UMs4Ee4jRrKExEuxzBGaqw761rZ89cE
+
+{
+  "title": "Search for the meaning of life",
+  "author": "Elliot",
+  "url": "some url",
+  "likes": 99
+}
