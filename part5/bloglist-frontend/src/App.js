@@ -147,7 +147,7 @@ const App = () => {
           blog={blog}
           updateBlog={updateBlog}
           removeBlog={
-            user && user.username === blog.creator.username ? removeBlog : null
+            user?.username === blog.creator.username ? removeBlog : null
           }
         />
       ))}

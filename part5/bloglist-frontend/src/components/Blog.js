@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 const Blog = ({ blog, updateBlog, removeBlog }) => {
-  console.log("render");
   const [showDetails, setShowDetails] = useState(false);
 
   const blogStyle = {
@@ -14,7 +13,7 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
 
   const handleLike = () => {
     const newBlog = {
-      creator: blog.creator.id,
+      creator: blog.creator?.id,
       likes: blog.likes + 1,
       author: blog.author,
       title: blog.title,
@@ -30,7 +29,7 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
   };
 
   return (
-    <div style={blogStyle}>
+    <div className="blog" style={blogStyle}>
       {blog.title} {blog.author}{" "}
       <button onClick={() => setShowDetails(!showDetails)}>
         {showDetails ? "hide" : "view"}
@@ -40,9 +39,12 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
           <br />
           {blog.url}
           <br />
-          likes {blog.likes} <button onClick={handleLike}>like</button>
+          likes {blog.likes}{" "}
+          <button data-testid="like-button" onClick={handleLike}>
+            like
+          </button>
           <br />
-          {blog.creator.name}
+          {blog.creator?.name}
           <br />
           {removeBlog && <button onClick={handleRemove}>remove</button>}
         </>
