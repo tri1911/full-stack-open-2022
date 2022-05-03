@@ -23,6 +23,8 @@ blogsRouter.post("/", userExtractor, async (request, response) => {
   });
 
   const savedBlog = await blog.save();
+  await savedBlog.populate("creator");
+
   user.blogs = user.blogs.concat(savedBlog._id);
   await user.save();
 
@@ -52,16 +54,16 @@ blogsRouter.delete("/:id", userExtractor, async (request, response) => {
   response.status(204).end();
 });
 
-// TODO: only the creator can update the blog post
 // Exercise 4.14 - update the information of an individual blog post
 blogsRouter.put("/:id", async (request, response) => {
-  const { likes } = request.body;
-
-  const blog = { likes };
+  const blog = request.body;
 
   const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
     new: true,
-  });
+    runValidators: true,
+    context: "query",
+  }).populate("creator");
+
   response.json(updatedBlog);
 });
 

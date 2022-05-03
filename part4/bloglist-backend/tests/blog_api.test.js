@@ -191,15 +191,14 @@ describe("when there is initially some blogs saved", () => {
   });
 
   // Exercise 4.14 - update the information of an individual blog post
-  // TODO: test for only the creator can update the blog post
   describe("update a blog post", () => {
     test("succeeds with status code 200 if data is valid", async () => {
       const blogsAtStart = await helper.blogsInDb();
-      const blogToUpdate = blogsAtStart[0];
+      const blogToUpdate = { ...blogsAtStart[0], likes: 999 };
 
       await api
         .put(`/api/blogs/${blogToUpdate.id}`)
-        .send({ likes: 999 })
+        .send(blogToUpdate)
         .expect(200)
         .expect("Content-Type", /application\/json/);
 
