@@ -116,7 +116,7 @@ const App = () => {
     }, 3000);
   };
 
-  const sortedBlogsToShow = [...blogs].sort((a, b) => a.likes - b.likes);
+  const sortedBlogsToShow = [...blogs].sort((a, b) => b.likes - a.likes);
 
   return (
     <div>
@@ -147,7 +147,7 @@ const App = () => {
           blog={blog}
           updateBlog={updateBlog}
           removeBlog={
-            user?.username === blog.creator.username ? removeBlog : null
+            user && user.username === blog.creator.username ? removeBlog : null
           }
         />
       ))}
