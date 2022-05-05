@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// variable used to store timeoutID in order to clear timeout when needed
+let timeoutID = null;
+
 const notificationSlice = createSlice({
   name: "notification",
   initialState: { message: null },
@@ -18,7 +21,13 @@ const notificationSlice = createSlice({
 export const setNotification = (message, duration) => {
   return (dispatch) => {
     dispatch(updateMessage(message));
-    setTimeout(() => dispatch(clearNotification()), duration * 1000);
+    timeoutID && clearTimeout(timeoutID);
+    // timeoutID && console.log("clearing timeoutId:", timeoutID);
+    timeoutID = setTimeout(() => {
+      // console.log("callback of", timeoutID, "called");
+      dispatch(clearNotification());
+    }, duration * 1000);
+    // console.log("created new timeoutId:", timeoutID);
   };
 };
 

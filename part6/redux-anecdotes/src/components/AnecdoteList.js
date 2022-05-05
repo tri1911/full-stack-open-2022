@@ -19,12 +19,10 @@ const AnecdoteItem = ({ anecdote, handleClick }) => {
 
 // container component
 const AnecdoteList = () => {
-  const anecdotes = useSelector((state) =>
-    state.anecdotes
+  const anecdotes = useSelector(({ anecdotes, filter }) =>
+    anecdotes
       .filter((anecdote) =>
-        anecdote.content
-          .toLowerCase()
-          .includes(state.filter.query.toLowerCase())
+        anecdote.content.toLowerCase().includes(filter.query.toLowerCase())
       )
       .sort((a, b) => b.votes - a.votes)
   );

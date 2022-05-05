@@ -1,12 +1,14 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { updateQuery } from "../reducers/filterReducer";
 
-const Filter = () => {
-  const dispatch = useDispatch();
+const Filter = ({ updateQuery }) => {
+  // const dispatch = useDispatch();
 
   const handleChange = (event) => {
-    dispatch(updateQuery(event.target.value));
+    // dispatch(updateQuery(event.target.value));
+    updateQuery(event.target.value);
   };
 
   const style = { marginBottom: 10 };
@@ -18,4 +20,4 @@ const Filter = () => {
   );
 };
 
-export default Filter;
+export default connect(null, { updateQuery })(Filter);
