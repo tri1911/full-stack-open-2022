@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createBlog } from "../reducers/blogReducer";
+import { Form, Button } from "react-bootstrap";
 
 const NewBlogForm = ({ toggleVisibility }) => {
   const [title, setTitle] = useState("");
@@ -20,41 +21,46 @@ const NewBlogForm = ({ toggleVisibility }) => {
   };
 
   return (
-    <div>
-      <h2>Create new</h2>
+    <div className="mb-2">
+      <h3>Create new</h3>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          title
-          <input
+      <Form onSubmit={handleSubmit}>
+        <Form.Group className="mb-3">
+          <Form.Label>Title</Form.Label>
+          <Form.Control
+            type="text"
+            id="title"
             value={title}
             onChange={({ target }) => setTitle(target.value)}
-            id="title"
-            placeholder="title of the blog"
+            placeholder="Enter title of the blog"
           />
-        </div>
-        <div>
-          author
-          <input
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Author</Form.Label>
+          <Form.Control
+            type="text"
+            id="author"
             value={author}
             onChange={({ target }) => setAuthor(target.value)}
-            id="author"
-            placeholder="author of the blog"
+            placeholder="Enter author of the blog"
           />
-        </div>
-        <div>
-          url
-          <input
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>URL</Form.Label>
+          <Form.Control
+            type="text"
+            id="url"
             value={url}
             onChange={({ target }) => setUrl(target.value)}
-            id="url"
-            placeholder="url of the blog"
+            placeholder="Enter URL of the blog"
           />
-        </div>
-        <button id="create-button" type="submit">
-          create
-        </button>
-      </form>
+        </Form.Group>
+        <Button id="create-button" variant="primary" type="submit">
+          Create
+        </Button>
+      </Form>
     </div>
   );
 };

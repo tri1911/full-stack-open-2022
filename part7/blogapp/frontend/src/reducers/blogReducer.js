@@ -99,4 +99,15 @@ export const likeBlog = (blog) => {
   };
 };
 
+export const submitComment = (id, comment) => {
+  return async (dispatch) => {
+    try {
+      const updatedBlog = await blogService.submitComment(id, comment);
+      dispatch(updateBlog(updatedBlog));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
 export default blogReducer.reducer;

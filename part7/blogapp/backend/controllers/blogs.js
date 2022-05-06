@@ -1,7 +1,6 @@
 const router = require("express").Router();
 
 const Blog = require("../models/blog");
-const User = require("../models/user");
 
 router.get("/", async (request, response) => {
   const notes = await Blog.find({})
@@ -47,6 +46,19 @@ router.delete("/:id", async (request, response) => {
   await Blog.findByIdAndRemove(request.params.id);
 
   response.status(204).end();
+});
+
+// Exercise 7.18 & 7.19
+router.post("/:id/comments", async (request, response) => {
+  const { comment } = request.body;
+  if (!comment) {
+    return response.status(400).json({ error: "comment should not be empty" });
+  }
+  const id = request.params.id;
+  const returnedBlog = await Blog.findById(id);
+  returnedBlog.comments = returnedBlog.comments.concat(comment);
+  await returnedBlog.save();
+  response.status(201).json(returnedBlog);
 });
 
 router.put("/:id", async (request, response) => {

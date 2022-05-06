@@ -1,22 +1,17 @@
+import { Alert } from "react-bootstrap";
+
 const Notification = ({ notification }) => {
   if (notification === null) {
     return null;
   }
 
-  const style = {
-    color: notification.type === "alert" ? "red" : "green",
-    background: "lightgrey",
-    fontSize: 20,
-    borderStyle: "solid",
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-  };
-
   return (
-    <div id="notification" style={style}>
+    <Alert
+      variant={notification.type === "alert" ? "danger" : "success"}
+      id="notification"
+    >
       {notification.message}
-    </div>
+    </Alert>
   );
 };
 
