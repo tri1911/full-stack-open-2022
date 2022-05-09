@@ -12,7 +12,10 @@
   "license": "ISC",
   "dependencies": {
     "apollo-server": "^3.7.0",
+    "dotenv": "^16.0.0",
     "graphql": "^16.4.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.3.3",
     "uuid": "^8.3.2"
   }
 }
