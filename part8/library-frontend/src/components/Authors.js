@@ -1,15 +1,11 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { useState } from "react";
 import { ALL_AUTHORS, UPDATE_AUTHOR } from "../queries";
 
-const Authors = (props) => {
-  const result = useQuery(ALL_AUTHORS);
-
-  if (!props.show || !result.data) {
+const Authors = ({ show, authors }) => {
+  if (!show || !authors) {
     return null;
   }
-
-  const authors = result.data.allAuthors;
 
   return (
     <div>

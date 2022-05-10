@@ -7,7 +7,6 @@ const {
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
-const { find } = require("./models/author");
 const Author = require("./models/author");
 const Book = require("./models/book");
 const User = require("./models/user");
@@ -179,7 +178,7 @@ const resolvers = {
       const { author: authorName, genre } = args;
       if (authorName) {
         const author = await Author.findOne({ name: authorName });
-        return Book.find({ author: author._id });
+        return Book.find({ author: author._id }).populate("author");
       }
       if (genre) {
         return Book.find({ genres: { $in: [genre] } }).populate("author");
