@@ -48,7 +48,7 @@ const Books = ({ show, genres }) => {
           key={genre}
           onClick={() => {
             setGenre(genre);
-            refetch({ genre });
+            refetch({ genre: genre === "all genres" ? null : genre });
           }}
         >
           {genre}
