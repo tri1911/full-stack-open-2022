@@ -128,15 +128,15 @@ const parseCriteria = (criteria: unknown): string => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const parseDischarge = (discharge: any): { date: string; criteria: string } => {
-  if (!discharge) {
-    throw new Error("Missing discharge");
-  }
-  return {
-    date: parseDate(discharge.date),
-    criteria: parseCriteria(discharge.criteria),
-  };
-};
+// const parseDischarge = (discharge: any): { date: string; criteria: string } => {
+//   if (!discharge) {
+//     throw new Error("Missing discharge");
+//   }
+//   return {
+//     date: parseDate(discharge.date),
+//     criteria: parseCriteria(discharge.criteria),
+//   };
+// };
 
 const parseDiagnosisCodes = (diagnosisCodes: unknown): string[] => {
   if (!Array.isArray(diagnosisCodes) || !diagnosisCodes.every(isString)) {
@@ -171,6 +171,10 @@ export const toNewEntry = (obj: any): EntryWithoutId => {
         diagnosisCodes,
         type,
         employerName: parseEmployerName(obj.employerName),
+        sickLeave: {
+          startDate: parseDate(obj.startDate),
+          endDate: parseDate(obj.endDate),
+        },
       };
     case "Hospital":
       return {
@@ -179,7 +183,10 @@ export const toNewEntry = (obj: any): EntryWithoutId => {
         specialist,
         diagnosisCodes,
         type,
-        discharge: parseDischarge(obj.discharge),
+        discharge: {
+          date: parseDate(obj.dischargeDate),
+          criteria: parseCriteria(obj.dischargeCriteria),
+        },
       };
   }
 };

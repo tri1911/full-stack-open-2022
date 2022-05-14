@@ -30,7 +30,7 @@ const healthCheckRatingOptions: Option[] = [
 
 const typeOptions: Option[] = [
   { value: EntryType.HealthCheck, label: "Healthy" },
-  { value: EntryType.OccupationalHealthcare, label: "OccupationalHealthcare" },
+  { value: EntryType.OccupationalHealthcare, label: "Occupational Healthcare" },
   { value: EntryType.Hospital, label: "Hospital" },
 ];
 
@@ -48,7 +48,7 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={initialValues as EntryFormValues}
       onSubmit={onSubmit}
       validate={(values) => {
         const requiredError = "Field is required";
@@ -65,7 +65,7 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         return errors;
       }}
     >
-      {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
+      {({ isValid, dirty, setFieldValue, setFieldTouched, values }) => {
         return (
           <Form className="form ui">
             <SelectField label="Type" name="type" options={typeOptions} />
@@ -92,11 +92,55 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
               setFieldValue={setFieldValue}
               setFieldTouched={setFieldTouched}
             />
-            <SelectField
-              label="Health Check Rating"
-              name="healthCheckRating"
-              options={healthCheckRatingOptions}
-            />
+
+            {values.type === EntryType.HealthCheck && (
+              <SelectField
+                label="Health Check Rating"
+                name="healthCheckRating"
+                options={healthCheckRatingOptions}
+              />
+            )}
+
+            {values.type === EntryType.OccupationalHealthcare && (
+              <>
+                <Field
+                  label="Employer Name"
+                  placeholder="Employer Name"
+                  name="employerName"
+                  component={TextField}
+                />
+                <Field
+                  label="Sick Leave Start Date"
+                  placeholder="Sick Leave Start Date"
+                  name="startDate"
+                  component={TextField}
+                />
+                <Field
+                  label="Sick Leave End Date"
+                  placeholder="Sick Leave End Date"
+                  name="endDate"
+                  component={TextField}
+                />
+              </>
+            )}
+
+            {values.type === EntryType.Hospital && (
+              <>
+                <Field
+                  label="Discharge Date"
+                  placeholder="Discharge Date"
+                  name="dischargeDate"
+                  component={TextField}
+                />
+                <Field
+                  label="Discharge Criteria"
+                  placeholder="Discharge Criteria"
+                  name="dischargeCriteria"
+                  component={TextField}
+                />
+              </>
+            )}
+
             <Grid>
               <Grid item>
                 <Button

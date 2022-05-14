@@ -34,8 +34,6 @@ const PatientDetailsPage = () => {
       dispatch({ type: "ADD_PATIENT_ENTRY", payload: newEntry });
       closeModal();
     } catch (e: unknown) {
-      console.log("error:", e);
-
       if (axios.isAxiosError(e)) {
         console.error(e?.response?.data || "Unrecognized axios error");
         setError(
