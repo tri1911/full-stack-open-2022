@@ -2,7 +2,7 @@ import React from "react";
 import { Grid, Button } from "@material-ui/core";
 import { Field, Formik, Form } from "formik";
 
-import { TextField, SelectField, GenderOption } from "./FormField";
+import { TextField, SelectField, Option } from "./FormField";
 import { Gender, Patient } from "../types";
 
 /*
@@ -16,7 +16,7 @@ interface Props {
   onCancel: () => void;
 }
 
-const genderOptions: GenderOption[] = [
+const genderOptions: Option[] = [
   { value: Gender.Male, label: "Male" },
   { value: Gender.Female, label: "Female" },
   { value: Gender.Other, label: "Other" },

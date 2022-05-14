@@ -4,6 +4,7 @@ import {
   HealthCheckEntry,
   OccupationalHealthcareEntry,
   HospitalEntry,
+  EntryType,
 } from "../types";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import LocalHospitalIcon from "@material-ui/icons/LocalHospital";
@@ -12,11 +13,11 @@ import FitnessCenterIcon from "@material-ui/icons/FitnessCenter";
 
 const EntryDetails = ({ entry }: { entry: Entry }) => {
   switch (entry.type) {
-    case "Hospital":
+    case EntryType.Hospital:
       return <HospitalEntryDetails entry={entry} />;
-    case "OccupationalHealthcare":
+    case EntryType.OccupationalHealthcare:
       return <OccupationalHealthcareEntryDetails entry={entry} />;
-    case "HealthCheck":
+    case EntryType.HealthCheck:
       return <HealthCheckEntryDetails entry={entry} />;
     default:
       return assertNever(entry);
