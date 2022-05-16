@@ -3,20 +3,23 @@ import theme from "../theme";
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 15,
-    borderStyle: "solid",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     borderWidth: 1,
-    borderColor: "grey",
-    borderRadius: 5,
-    padding: 10,
+    borderStyle: "solid",
+    fontSize: theme.fontSizes.body,
+    fontFamily: theme.fonts.main,
+    color: theme.colors.textPrimary,
+    borderRadius: theme.roundness,
+    borderColor: "#aab2bb",
   },
-  errorBorder: {
-    borderColor: theme.colors.red,
+  error: {
+    borderColor: theme.colors.error,
   },
 });
 
 const TextInput = ({ style, error, ...props }) => {
-  const textInputStyle = [styles.container, error && styles.errorBorder, style];
+  const textInputStyle = [styles.container, error && styles.error, style];
 
   return <NativeTextInput style={textInputStyle} {...props} />;
 };

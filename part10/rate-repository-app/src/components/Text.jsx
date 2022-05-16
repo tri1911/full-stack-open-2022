@@ -1,4 +1,4 @@
-import { Text as NativeText, StyleSheet, Platform } from "react-native";
+import { Text as NativeText, StyleSheet } from "react-native";
 
 import theme from "../theme";
 
@@ -6,11 +6,7 @@ const styles = StyleSheet.create({
   text: {
     color: theme.colors.textPrimary,
     fontSize: theme.fontSizes.body,
-    fontFamily: Platform.select({
-      default: theme.fonts.default,
-      android: theme.fonts.android,
-      ios: theme.fonts.ios,
-    }),
+    fontFamily: theme.fonts.main,
     fontWeight: theme.fontWeights.normal,
   },
   colorTextSecondary: {
