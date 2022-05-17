@@ -40,18 +40,8 @@ const SignInForm = ({ onSubmit }) => {
   );
 };
 
-const SignIn = () => {
-  const [signIn] = useSignIn();
-  const navigate = useNavigate();
-
-  const onSubmit = async (values) => {
-    const { username, password } = values;
-
-    await signIn({ username, password });
-
-    navigate("/", { replace: true });
-  };
-
+// pure form container extracted for testing purpose
+export const SignInContainer = ({ onSubmit }) => {
   return (
     <Formik
       initialValues={initialValues}
@@ -61,6 +51,19 @@ const SignIn = () => {
       {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} />}
     </Formik>
   );
+};
+
+const SignIn = () => {
+  const [signIn] = useSignIn();
+  const navigate = useNavigate();
+
+  const onSubmit = async (values) => {
+    const { username, password } = values;
+    await signIn({ username, password });
+    navigate("/", { replace: true });
+  };
+
+  return <SignInContainer onSubmit={onSubmit} />;
 };
 
 export default SignIn;

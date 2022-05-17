@@ -4,41 +4,66 @@ import theme from "../theme";
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
     backgroundColor: "white",
+    padding: 15,
   },
-  image: {
-    width: 50,
-    height: 50,
-    borderRadius: 5,
-  },
-  language: {
-    backgroundColor: theme.colors.primary,
-    color: "white",
-    alignSelf: "flex-start",
-    borderRadius: 5,
-    overflow: "hidden",
-    padding: 5,
-    marginTop: 5,
-  },
-  spaceY: {
-    paddingVertical: 5,
-  },
-  counterContainer: {
+  topContainer: {
     flexDirection: "row",
-    marginTop: 20,
-    justifyContent: "space-between",
-    paddingHorizontal: 10,
+    marginBottom: 15,
+  },
+  bottomContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  avatarContainer: {
+    flexGrow: 0,
+    justifyContent: "space-around",
+  },
+  contentContainer: {
+    flexGrow: 1,
+    flexShrink: 1,
+  },
+  nameText: {
+    marginBottom: 5,
+  },
+  descriptionText: {
+    flexGrow: 1,
+  },
+  avatar: {
+    width: 45,
+    height: 45,
+    borderRadius: theme.roundness,
+  },
+  countItem: {
+    flexGrow: 0,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 15,
+  },
+  countItemCount: {
+    marginBottom: 5,
+  },
+  languageContainer: {
+    marginTop: 10,
+    flexDirection: "row",
+  },
+  languageText: {
+    color: "white",
+    backgroundColor: theme.colors.primary,
+    borderRadius: theme.roundness,
+    flexGrow: 0,
+    paddingVertical: 3,
+    paddingHorizontal: 6,
   },
 });
 
-const CounterView = ({ label, value }) => {
+const CountView = ({ label, value }) => {
   const valueToShow =
     value > 1000 ? `${Number(value / 1000).toFixed(1)}k` : value;
 
   return (
-    <View style={styles.counter}>
-      <Text fontWeight="bold" style={styles.spaceY}>
+    <View style={styles.countItem}>
+      <Text style={styles.countItemCount} fontWeight="bold">
         {valueToShow}
       </Text>
       <Text color="textSecondary">{label}</Text>
@@ -47,28 +72,47 @@ const CounterView = ({ label, value }) => {
 };
 
 const RepositoryItem = ({ repository }) => {
+  const {
+    fullName,
+    description,
+    language,
+    forksCount,
+    stargazersCount,
+    ratingAverage,
+    reviewCount,
+    ownerAvatarUrl,
+  } = repository;
+
   return (
-    <View style={styles.container}>
-      <View style={{ flexDirection: "row" }}>
-        <Image
-          style={styles.image}
-          source={{ uri: repository.ownerAvatarUrl }}
-        />
-        <View style={{ marginLeft: 25 }}>
-          <Text fontWeight="bold" fontSize="subheading" style={styles.spaceY}>
-            {repository.fullName}
+    <View testID="repositoryItem" style={styles.container}>
+      <View style={styles.topContainer}>
+        <View style={styles.avatarContainer}>
+          <Image source={{ uri: ownerAvatarUrl }} style={styles.avatar} />
+        </View>
+        <View style={styles.contentContainer}>
+          <Text
+            style={styles.nameText}
+            fontWeight="bold"
+            fontSize="subheading"
+            numberOfLines={1}
+          >
+            {fullName}
           </Text>
-          <Text color="textSecondary" style={styles.spaceY}>
-            {repository.description}
+          <Text style={styles.descriptionText} color="textSecondary">
+            {description}
           </Text>
-          <Text style={styles.language}>{repository.language}</Text>
+          {language ? (
+            <View style={styles.languageContainer}>
+              <Text style={styles.languageText}>{language}</Text>
+            </View>
+          ) : null}
         </View>
       </View>
-      <View style={styles.counterContainer}>
-        <CounterView label="Stars" value={repository.stargazersCount} />
-        <CounterView label="Forks" value={repository.forksCount} />
-        <CounterView label="Reviews" value={repository.reviewCount} />
-        <CounterView label="Rating" value={repository.ratingAverage} />
+      <View style={styles.bottomContainer}>
+        <CountView label="Stars" value={stargazersCount} />
+        <CountView label="Forks" value={forksCount} />
+        <CountView label="Reviews" value={reviewCount} />
+        <CountView label="Rating" value={ratingAverage} />
       </View>
     </View>
   );

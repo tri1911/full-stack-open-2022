@@ -47,6 +47,8 @@ const AppBarTab = ({ children, to, ...props }) => {
   );
 };
 
+// TODO: fetch current user with useQuery
+
 const AppBar = () => {
   const apolloClient = useApolloClient();
   const authStorage = useAuthStorage();
