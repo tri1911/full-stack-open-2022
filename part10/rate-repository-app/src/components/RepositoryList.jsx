@@ -3,8 +3,9 @@ import RepositoryItem from "./RepositoryItem";
 import useRepositories from "../hooks/useRepositories";
 import { useNavigate } from "react-router-native";
 import { useState } from "react";
-import { Button, Menu, Provider } from "react-native-paper";
+import { Button, Menu, Provider, Searchbar } from "react-native-paper";
 import Text from "./Text";
+import { useDebounce } from "use-debounce";
 
 const styles = StyleSheet.create({
   separator: {
@@ -17,11 +18,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   menuBarText: { marginLeft: 10 },
+  listHeaderContainer: {},
+  searchBarContainer: {
+    padding: 10,
+  },
+  shadowProp: {
+    shadowColor: "#171717",
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+  },
 });
 
 export const ItemSeparator = () => <View style={styles.separator} />;
 
-export const RepositoryContainer = ({ repositories, ListHeaderComponent }) => {
+export const RepositoryContainer = ({
+  children,
+  repositories,
+  // ListHeaderComponent,
+}) => {
   const navigate = useNavigate();
 
   const repositoryNodes = repositories
@@ -39,13 +54,16 @@ export const RepositoryContainer = ({ repositories, ListHeaderComponent }) => {
   );
 
   return (
-    <FlatList
-      data={repositoryNodes}
-      keyExtractor={(item) => item.id}
-      renderItem={renderItem}
-      ItemSeparatorComponent={ItemSeparator}
-      ListHeaderComponent={ListHeaderComponent}
-    />
+    <View>
+      {children}
+      <FlatList
+        data={repositoryNodes}
+        keyExtractor={(item) => item.id}
+        renderItem={renderItem}
+        ItemSeparatorComponent={ItemSeparator}
+        // ListHeaderComponent={ListHeaderComponent}
+      />
+    </View>
   );
 };
 
@@ -67,8 +85,15 @@ const orderPrinciples = {
   },
 };
 
-const SortMenuBar = ({ sortTitle, handleSelection }) => {
+const SortMenuBar = ({ sortTitle, setOrderKey }) => {
   const [visible, setVisible] = useState(false);
+
+  const openMenu = () => setVisible(true);
+  const closeMenu = () => setVisible(false);
+  const handleSelection = (key) => () => {
+    setOrderKey(key);
+    closeMenu();
+  };
 
   return (
     <View style={styles.menuContainer}>
@@ -77,23 +102,14 @@ const SortMenuBar = ({ sortTitle, handleSelection }) => {
       </Text>
       <Menu
         visible={visible}
-        onDismiss={() => setVisible(false)}
+        onDismiss={closeMenu}
         anchor={
-          <Button
-            compact
-            color="black"
-            icon="menu-down"
-            onPress={() => setVisible(true)}
-          />
+          <Button compact color="black" icon="menu-down" onPress={openMenu} />
         }
       >
         <Menu.Item title="Select an item..." disabled />
         {Object.entries(orderPrinciples).map(([key, { title }]) => (
-          <Menu.Item
-            key={key}
-            title={title}
-            onPress={() => handleSelection(key)}
-          />
+          <Menu.Item key={key} title={title} onPress={handleSelection(key)} />
         ))}
       </Menu>
     </View>
@@ -103,21 +119,35 @@ const SortMenuBar = ({ sortTitle, handleSelection }) => {
 const RepositoryList = () => {
   const [orderKey, setOrderKey] = useState("default");
 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedQuery] = useDebounce(searchQuery, 500);
+
   const { title, orderBy, orderDirection } = orderPrinciples[orderKey];
 
-  const { repositories } = useRepositories({ orderBy, orderDirection });
+  const { repositories } = useRepositories({
+    orderBy,
+    orderDirection,
+    searchKeyword: debouncedQuery,
+  });
 
   return (
     <Provider>
       <RepositoryContainer
         repositories={repositories}
-        ListHeaderComponent={() => (
-          <SortMenuBar
-            sortTitle={title}
-            handleSelection={(key) => setOrderKey(key)}
-          />
-        )}
-      />
+        // ListHeaderComponent={}
+      >
+        <View style={styles.listHeaderContainer}>
+          <View style={styles.searchBarContainer}>
+            <Searchbar
+              style={styles.shadowProp}
+              placeholder="Search"
+              onChangeText={(query) => setSearchQuery(query)}
+              value={searchQuery}
+            />
+          </View>
+          <SortMenuBar sortTitle={title} setOrderKey={setOrderKey} />
+        </View>
+      </RepositoryContainer>
     </Provider>
   );
 };
