@@ -11,6 +11,7 @@ export const REPOSITORY_BASE_FIELDS = gql`
     reviewCount
     ratingAverage
     id
+    url
   }
 `;
 

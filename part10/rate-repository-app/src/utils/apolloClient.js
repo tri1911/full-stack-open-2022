@@ -13,7 +13,7 @@ const createApolloClient = (authStorage) => {
     try {
       const accessToken = await authStorage.getAccessToken();
 
-      console.log("[setToken] accessToken:", accessToken);
+      // console.log("[apolloClient] accessToken:", accessToken);
 
       return {
         headers: {

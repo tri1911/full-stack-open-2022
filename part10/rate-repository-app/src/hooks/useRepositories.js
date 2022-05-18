@@ -4,13 +4,18 @@ import { GET_REPOSITORIES } from "../graphql/queries";
 
 // TODO: use useQuery to fetch data from GraphQL
 
-const useRepositories = () => {
+const useRepositories = ({ orderBy, orderDirection }) => {
   const [repositories, setRepositories] = useState();
   const apolloClient = useApolloClient();
 
-  apolloClient.query({ query: GET_REPOSITORIES }).then(({ data }) => {
-    setRepositories(data.repositories);
-  });
+  apolloClient
+    .query({
+      query: GET_REPOSITORIES,
+      variables: { orderBy, orderDirection },
+    })
+    .then(({ data }) => {
+      setRepositories(data.repositories);
+    });
 
   return { repositories };
 };

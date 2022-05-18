@@ -27,6 +27,9 @@ const styles = StyleSheet.create({
   tabText: {
     color: "white",
   },
+  tabGroupContainer: {
+    flexDirection: "row",
+  },
 });
 
 const AppBarTab = ({ children, to, ...props }) => {
@@ -57,11 +60,11 @@ const AppBar = () => {
   const [currentUser, setCurrentUser] = useState(null);
 
   apolloClient.query({ query: GET_CURRENT_USER }).then(({ data }) => {
-    console.log("fetch current user...");
+    // console.log("[AppBar] fetch current user...");
     setCurrentUser(data?.me);
   });
 
-  console.log("[AppBar] currentUser:", currentUser);
+  // console.log("[AppBar] currentUser:", currentUser);
 
   const onSignOut = async () => {
     await authStorage.removeAccessToken();
@@ -74,9 +77,15 @@ const AppBar = () => {
       <ScrollView style={styles.scrollView} horizontal>
         <AppBarTab to="/">Repositories</AppBarTab>
         {currentUser ? (
-          <AppBarTab onPress={onSignOut}>Sign Out</AppBarTab>
+          <View style={styles.tabGroupContainer}>
+            <AppBarTab to="/create-review">Create a review</AppBarTab>
+            <AppBarTab onPress={onSignOut}>Sign Out</AppBarTab>
+          </View>
         ) : (
-          <AppBarTab to="/sign-in">Sign In</AppBarTab>
+          <View style={styles.tabGroupContainer}>
+            <AppBarTab to="/sign-in">Sign In</AppBarTab>
+            <AppBarTab to="/sign-up">Sign Up</AppBarTab>
+          </View>
         )}
       </ScrollView>
     </View>

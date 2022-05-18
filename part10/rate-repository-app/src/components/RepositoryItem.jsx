@@ -2,6 +2,9 @@ import { View, Image, StyleSheet } from "react-native";
 import Text from "./Text";
 import theme from "../theme";
 
+import Button from "./Button";
+import * as Linking from "expo-linking";
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
@@ -17,7 +20,7 @@ const styles = StyleSheet.create({
   },
   avatarContainer: {
     flexGrow: 0,
-    justifyContent: "space-around",
+    marginRight: 20,
   },
   contentContainer: {
     flexGrow: 1,
@@ -45,16 +48,19 @@ const styles = StyleSheet.create({
   },
   languageContainer: {
     marginTop: 10,
-    flexDirection: "row",
+    // flexDirection: "row",
+    alignSelf: "flex-start",
+    overflow: "hidden",
+    borderRadius: theme.roundness,
   },
   languageText: {
     color: "white",
     backgroundColor: theme.colors.primary,
-    borderRadius: theme.roundness,
     flexGrow: 0,
     paddingVertical: 3,
     paddingHorizontal: 6,
   },
+  openBtn: { marginTop: 15 },
 });
 
 const CountView = ({ label, value }) => {
@@ -71,7 +77,9 @@ const CountView = ({ label, value }) => {
   );
 };
 
-const RepositoryItem = ({ repository }) => {
+const RepositoryItem = ({ repository, openBtn }) => {
+  if (!repository) return null;
+
   const {
     fullName,
     description,
@@ -81,6 +89,7 @@ const RepositoryItem = ({ repository }) => {
     ratingAverage,
     reviewCount,
     ownerAvatarUrl,
+    url,
   } = repository;
 
   return (
@@ -103,7 +112,9 @@ const RepositoryItem = ({ repository }) => {
           </Text>
           {language ? (
             <View style={styles.languageContainer}>
-              <Text style={styles.languageText}>{language}</Text>
+              <Text style={styles.languageText} fontWeight="bold">
+                {language}
+              </Text>
             </View>
           ) : null}
         </View>
@@ -114,6 +125,16 @@ const RepositoryItem = ({ repository }) => {
         <CountView label="Reviews" value={reviewCount} />
         <CountView label="Rating" value={ratingAverage} />
       </View>
+      {openBtn && (
+        <Button
+          style={styles.openBtn}
+          onPress={() => {
+            Linking.openURL(url);
+          }}
+        >
+          Open in GitHub
+        </Button>
+      )}
     </View>
   );
 };
