@@ -15,3 +15,7 @@ Exercises during the course
 ### TypeScript
 
 ![Certificate of Completion - TypeScript](./certificate-typescript.png)
+
+### React Native
+
+![Certificate of Completion - React Native](./certificate-reactnative.png)
