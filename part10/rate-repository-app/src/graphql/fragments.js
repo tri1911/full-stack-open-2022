@@ -35,3 +35,11 @@ export const REVIEW_BASE_FIELDS = gql`
     }
   }
 `;
+
+export const PAGE_INFO_BASE_FIELDS = gql`
+  fragment pageInfoBaseFields on PageInfo {
+    startCursor
+    endCursor
+    hasNextPage
+  }
+`;

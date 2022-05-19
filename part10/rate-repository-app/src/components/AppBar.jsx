@@ -1,8 +1,7 @@
-import { useState } from "react";
 import { View, StyleSheet, ScrollView, Pressable } from "react-native";
 import Constants from "expo-constants";
 import { Link, useNavigate } from "react-router-native";
-import { useApolloClient } from "@apollo/client";
+import { useApolloClient, useQuery } from "@apollo/client";
 
 import theme from "../theme";
 import Text from "./Text";
@@ -50,20 +49,13 @@ const AppBarTab = ({ children, to, ...props }) => {
   );
 };
 
-// TODO: fetch current user with useQuery
-
 const AppBar = () => {
   const apolloClient = useApolloClient();
   const authStorage = useAuthStorage();
   const navigate = useNavigate();
 
-  const [currentUser, setCurrentUser] = useState(null);
-
-  apolloClient.query({ query: GET_CURRENT_USER }).then(({ data }) => {
-    // console.log("[AppBar] fetch current user...");
-    setCurrentUser(data?.me);
-  });
-
+  const { data } = useQuery(GET_CURRENT_USER);
+  const currentUser = data?.me;
   // console.log("[AppBar] currentUser:", currentUser);
 
   const onSignOut = async () => {
@@ -79,6 +71,7 @@ const AppBar = () => {
         {currentUser ? (
           <View style={styles.tabGroupContainer}>
             <AppBarTab to="/create-review">Create a review</AppBarTab>
+            <AppBarTab to="/user-reviews">My Reviews</AppBarTab>
             <AppBarTab onPress={onSignOut}>Sign Out</AppBarTab>
           </View>
         ) : (

@@ -135,7 +135,7 @@ const RepositoryList = () => {
   });
 
   const onEndReach = () => {
-    console.log("[RepositoryList] You have reached the end of the list");
+    // console.log("[RepositoryList] You have reached the end of the list");
     fetchMore();
   };
 

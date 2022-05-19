@@ -1,5 +1,6 @@
 import { gql } from "@apollo/client";
 import {
+  PAGE_INFO_BASE_FIELDS,
   REPOSITORY_BASE_FIELDS,
   REVIEW_BASE_FIELDS,
   USER_BASE_FIELDS,
@@ -27,14 +28,13 @@ export const GET_REPOSITORIES = gql`
         }
       }
       pageInfo {
-        endCursor
-        startCursor
-        hasNextPage
+        ...pageInfoBaseFields
       }
     }
   }
 
   ${REPOSITORY_BASE_FIELDS}
+  ${PAGE_INFO_BASE_FIELDS}
 `;
 
 export const GET_SINGLE_REPOSITORY = gql`
@@ -50,9 +50,7 @@ export const GET_SINGLE_REPOSITORY = gql`
           cursor
         }
         pageInfo {
-          endCursor
-          startCursor
-          hasNextPage
+          ...pageInfoBaseFields
         }
       }
     }
@@ -60,14 +58,28 @@ export const GET_SINGLE_REPOSITORY = gql`
 
   ${REPOSITORY_BASE_FIELDS}
   ${REVIEW_BASE_FIELDS}
+  ${PAGE_INFO_BASE_FIELDS}
 `;
 
 export const GET_CURRENT_USER = gql`
-  query Me {
+  query getCurrentUser($includeReviews: Boolean = false) {
     me {
       ...userBaseFields
+      reviews @include(if: $includeReviews) {
+        edges {
+          node {
+            ...reviewBaseFields
+          }
+          cursor
+        }
+        pageInfo {
+          ...pageInfoBaseFields
+        }
+      }
     }
   }
 
   ${USER_BASE_FIELDS}
+  ${REVIEW_BASE_FIELDS}
+  ${PAGE_INFO_BASE_FIELDS}
 `;
