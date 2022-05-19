@@ -9,7 +9,7 @@ const useReview = () => {
     const {
       data: { createReview: createdReview },
     } = await mutate({ variables: { review } });
-    console.log("[useReview] created review:", createdReview);
+    // console.log("[useReview] created review:", createdReview);
     return createdReview;
   };
 

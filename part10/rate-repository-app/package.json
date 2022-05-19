@@ -24,7 +24,7 @@
     ]
   },
   "dependencies": {
-    "@apollo/client": "^3.6.2",
+    "@apollo/client": "^3.5.7",
     "@expo/metro-config": "^0.3.17",
     "@react-native-async-storage/async-storage": "~1.15.0",
     "date-fns": "^2.28.0",

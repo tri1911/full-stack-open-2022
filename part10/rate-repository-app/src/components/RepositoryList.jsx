@@ -36,6 +36,7 @@ export const RepositoryContainer = ({
   children,
   repositories,
   // ListHeaderComponent,
+  onEndReach,
 }) => {
   const navigate = useNavigate();
 
@@ -62,6 +63,8 @@ export const RepositoryContainer = ({
         renderItem={renderItem}
         ItemSeparatorComponent={ItemSeparator}
         // ListHeaderComponent={ListHeaderComponent}
+        onEndReached={onEndReach}
+        onEndReachedThreshold={0.2}
       />
     </View>
   );
@@ -124,17 +127,24 @@ const RepositoryList = () => {
 
   const { title, orderBy, orderDirection } = orderPrinciples[orderKey];
 
-  const { repositories } = useRepositories({
+  const { repositories, fetchMore } = useRepositories({
+    first: 8,
     orderBy,
     orderDirection,
     searchKeyword: debouncedQuery,
   });
+
+  const onEndReach = () => {
+    console.log("[RepositoryList] You have reached the end of the list");
+    fetchMore();
+  };
 
   return (
     <Provider>
       <RepositoryContainer
         repositories={repositories}
         // ListHeaderComponent={}
+        onEndReach={onEndReach}
       >
         <View style={styles.listHeaderContainer}>
           <View style={styles.searchBarContainer}>

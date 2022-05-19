@@ -1,28 +1,27 @@
 import { useParams } from "react-router-native";
-import RepositoryItem from "./RepositoryItem";
-import { useApolloClient } from "@apollo/client";
-import { GET_SINGLE_REPOSITORY } from "../graphql/queries";
-import { useState } from "react";
-
 import { FlatList } from "react-native";
+
+import RepositoryItem from "./RepositoryItem";
 import { ItemSeparator } from "./RepositoryList";
 import ReviewItem from "./ReviewItem";
 
-// TODO: fetch data using useQuery
+import useRepository from "../hooks/useRepository";
 
 const SingleRepository = () => {
-  const [repository, setRepository] = useState(null);
   const { id } = useParams();
-  const apolloClient = useApolloClient();
 
-  apolloClient
-    .query({ query: GET_SINGLE_REPOSITORY, variables: { repositoryId: id } })
-    .then(({ data }) => {
-      // console.log("[SingleRepository] returned repository:", data.repository);
-      setRepository(data.repository);
-    });
+  const { repository, fetchMoreReviews } = useRepository({
+    repositoryId: id,
+    first: 4,
+  });
+  // console.log("[SingleRepository] returned repository:", data.repository);
 
   const reviews = repository?.reviews.edges.map((edge) => edge.node) ?? [];
+
+  const handleEndReached = () => {
+    console.log("[SingleRepository] reviews list has reached end");
+    fetchMoreReviews();
+  };
 
   return (
     <FlatList
@@ -33,6 +32,8 @@ const SingleRepository = () => {
         <RepositoryItem repository={repository} openBtn />
       )}
       ItemSeparatorComponent={ItemSeparator}
+      onEndReachedThreshold={0.1}
+      onEndReached={handleEndReached}
     />
   );
 };

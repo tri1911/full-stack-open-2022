@@ -1,23 +1,55 @@
-import { useState } from "react";
-import { useApolloClient } from "@apollo/client";
+import { useQuery } from "@apollo/client";
+// import { useState } from "react";
+// import { useApolloClient } from "@apollo/client";
+
 import { GET_REPOSITORIES } from "../graphql/queries";
 
-// TODO: use useQuery to fetch data from GraphQL
+// use useQuery to fetch data from GraphQL
+const useRepositories = (variables) => {
+  const { data, loading, fetchMore, ...result } = useQuery(GET_REPOSITORIES, {
+    variables,
+    fetchPolicy: "cache-and-network",
+  });
 
-const useRepositories = ({ orderBy, orderDirection, searchKeyword }) => {
-  const [repositories, setRepositories] = useState();
-  const apolloClient = useApolloClient();
+  const handleFetchMore = () => {
+    const canFetchMore = !loading && data?.repositories.pageInfo.hasNextPage;
 
-  apolloClient
-    .query({
-      query: GET_REPOSITORIES,
-      variables: { orderBy, orderDirection, searchKeyword },
-    })
-    .then(({ data }) => {
-      setRepositories(data.repositories);
+    if (!canFetchMore) {
+      return;
+    }
+
+    fetchMore({
+      variables: {
+        after: data.repositories.pageInfo.endCursor,
+        ...variables,
+      },
     });
+  };
 
-  return { repositories };
+  return {
+    repositories: data?.repositories,
+    fetchMore: handleFetchMore,
+    loading,
+    ...result,
+  };
 };
+
+/*
+  const useRepositories = (variables) => {
+    const [repositories, setRepositories] = useState();
+    const apolloClient = useApolloClient();
+
+    apolloClient
+      .query({
+        query: GET_REPOSITORIES,
+        variables,
+      })
+      .then(({ data }) => {
+        setRepositories(data.repositories);
+      });
+
+    return { repositories };
+  };
+*/
 
 export default useRepositories;
