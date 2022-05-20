@@ -40,6 +40,22 @@ jobs:
           healthcheck: "https://full-stack-open-pokedex-elliot.herokuapp.com/health"
           checkstring: "ok"
           rollbackonhealthcheckfailed: true
+      - name: Build Success
+        uses: rjstone/discord-webhook-notify@v1
+        if: success()
+        with:
+          severity: info
+          description: A new version of Pokedex deployed
+          details: to https://full-stack-open-pokedex-elliot.herokuapp.com/ by ${{ github.event.head_commit.author.name }}
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: Build Failure
+        uses: rjstone/discord-webhook-notify@v1
+        if: failure()
+        with:
+          severity: error
+          description: commit <br /> ${{ github.event.head_commit.url }} by ${{ github.event.head_commit.author.name }} broke the build :(
+          details: Build Failed!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
   tag_release:
     if: ${{ github.event_name == 'push' && ! contains(join(github.event.commits.*.message), '#skip') }}
     needs: [simple_deployment_pipeline]
